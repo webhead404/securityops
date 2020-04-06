@@ -1,0 +1,54 @@
+description: Emails SIEM signals
+filter:
+- query:
+    query_string:
+      query: signal.rule.severity:("critical" or "high")
+- query:
+    query_string:
+      query: agent.type:"filebeat"
+
+index: .siem-signals-central-siem-*
+name: New-High-Signal-in-SIEM-PaloAlto
+priority: 2
+realert:
+  minutes: 0
+type: any
+
+alert: hivealerter
+
+hive_connection:
+  hive_host: http://$ip:9000
+  #hive_port: 9000
+  hive_apikey: $hive_api
+
+
+hive_alert_config:
+  title: '{match[signal][rule][name]}'
+  description: 'A new alert was triggered in the Central SIEM. A short description of the event is below.
+
+
+
+ ```Signal Description:``` {match[signal][rule][description]}
+
+
+
+```Signal Full Detail:``` [Central-SIEM](http://$ip:5601/s/central-siem/app/siem#/detections/rules/id/{match[signal][rule][id]})
+
+
+
+```Kibana:``` [Pivot to Event](http://$ip:5601/s/central-siem/app/kibana#/discover?_g=(refreshInterval:(pause:!t,value:0%29,time:(from:now%2Fd,to:now%2Fd%29%29&_a=(columns:!(_source%29,interval:auto,query:(language:kuery,query:%27_id:%22{match[_id]}%22%27%29,sort:!(!(%27@timestamp%27,desc%29%29%29)
+
+
+
+```Full Event:``` {match[log][original]}'
+  type: 'external'
+  source: 'Central-SIEM'
+  severity: 2
+  tags: ['elastalert']
+  tlp: 3
+  status: 'New'
+  follow: True
+
+hive_observable_data_mapping:
+  - ip: '{match[source][ip]}'
+  - ip: '{match[destination][ip]}'
