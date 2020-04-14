@@ -104,4 +104,4 @@ The ```manage_api_key cluster privilege``` (see Security privileges).
 
 The ```create_index privilege``` for the Kibana space (see Indices privileges).
 
-Kibana space ``All privileges``` for the SIEM feature (see Feature access based on user privileges).
+Kibana space ```All privileges``` for the SIEM feature (see Feature access based on user privileges).
