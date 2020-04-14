@@ -1,42 +1,41 @@
-# This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6
-# All command will have to be run with root/admin privelege
+# This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6.
+All command will have to be run with root/admin privelege
 
 First generate certificates. Elastic has a tool for this. 
 
 ```./bin/elasticsearch-certutil cert```
-1. Set the filename to config/elastic-certificates.p12
+
+Set the filename to config/elastic-certificates.p12
 
 # You will need to generate a CA and/or client certificates for each part of the cluster. 
-# That can be accomplished by something like the following:
+That can be accomplished by something like the following:
+
 Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication
 
 # CA
-openssl pkcs12 -in elastic-certificates.p12 -cacerts -nokeys -chain > client-ca.cer
+```openssl pkcs12 -in elastic-certificates.p12 -cacerts -nokeys -chain > client-ca.cer```
 
 # private key:
 
-openssl pkcs12 -in elastic-certificates.p12 -nocerts -nodes > client.key
+```openssl pkcs12 -in elastic-certificates.p12 -nocerts -nodes > client.key```
 
 # public cert
 
-openssl pkcs12 -in elastic-certificates.p12 -clcerts -nokeys  > client.cer
+```openssl pkcs12 -in elastic-certificates.p12 -clcerts -nokeys  > client.cer```
 
 
 # Second add or change/uncomment the following lines in elasticsearch.yml
 
-xpack.security.enabled: true
-xpack.security.transport.ssl.enabled: true
-xpack.security.transport.ssl.verification_mode: certificate
-xpack.security.transport.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12
-xpack.security.transport.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
+```xpack.security.enabled: true```
+```xpack.security.transport.ssl.enabled: true```
+```xpack.security.transport.ssl.verification_mode: certificate```
+```xpack.security.transport.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12```
+```xpack.security.transport.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
-xpack.security.http.ssl.enabled: true
-xpack.security.http.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12 
-xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12
 
-# Transport security is to enable the security indexes and set up RBAC. 
-# The HTTP security is primarily used to establish a secure connection for managing elasticsearch API's 
-# which is reequired for the SIEM Detection engine.
+Transport security is to enable the security indexes and set up RBAC. 
+The HTTP security is primarily used to establish a secure connection for managing elasticsearch API's 
+which is required for the SIEM Detection engine.
 
 # Additionally make sure that the bind addresses for elasticsearch are not localhost. 
 
@@ -44,10 +43,16 @@ xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates
 
 # Generate passwords for the users
 
-./bin/elasticsearch-setup-passwords auto
+```./bin/elasticsearch-setup-passwords auto```
 
 # Elastic will automatically generate random passwords for the users that are needed to 
 # establish connections which will be the elastic and kibana users respectively. 
+
+Now add these lines to elasticsearch
+
+```xpack.security.http.ssl.enabled: true```
+```xpack.security.http.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12```
+```xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
 # Copy the client certificate to Kibana and modify kibana.yml 
 # Add or change/uncomment the following lines
