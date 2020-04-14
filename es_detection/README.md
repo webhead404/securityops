@@ -39,11 +39,9 @@ Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-
 
 Transport security is to enable the security indexes and set up RBAC. 
 The HTTP security is primarily used to establish a secure connection for managing elasticsearch API's 
-which is required for the SIEM Detection engine.
+which is required for the SIEM Detection engine. Additionally make sure that the bind addresses for elasticsearch are not localhost. 
 
-# Additionally make sure that the bind addresses for elasticsearch are not localhost. 
-
-# Start elasticsearch
+Start elasticsearch
 
 # Generate passwords for the users
 
@@ -52,44 +50,50 @@ which is required for the SIEM Detection engine.
 # Elastic will automatically generate random passwords for the users that are needed to 
 # establish connections which will be the elastic and kibana users respectively. 
 
-Now add these lines to elasticsearch
+Now add these lines to Elasticsearch. They are required for Kibana to establish a secure connection to Elasticsearch and will enable the rest of the settings in Elasticsearch for Detection rules. 
 
 ```xpack.security.http.ssl.enabled: true```
 ```xpack.security.http.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12```
 ```xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
-# Copy the client certificate to Kibana and modify kibana.yml 
-# Add or change/uncomment the following lines
+Copy the client certificate to Kibana and modify kibana.yml 
+Add or change/uncomment the following lines
 Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication
 
-elasticsearch.url: "https://your-ip-here:9200" #ensure https not http
-xpack.security.enabled: true
-elasticsearch.username: "kibana"
-elasticsearch.password: "your kibana password goes here"
-elasticsearch.ssl.certificateAuthorities: config/certs/client-ca.cer
-elasticsearch.ssl.verificationMode: certificate
+```elasticsearch.url: "https://your-ip-here:9200" #ensure https not http```
 
-# Add required 32 character persistent key for savedObjects in kibana.yml
-# Each time Kibana starts it generates a new encryption key for saved objects such as dashboards, visualizations and searches. 
-# This should be set manually for local Kibana deployments. 
+```xpack.security.enabled: true```
+
+```elasticsearch.username: "kibana"```
+
+```elasticsearch.password: "your kibana password goes here"```
+
+```elasticsearch.ssl.certificateAuthorities: config/certs/client-ca.cer```
+
+```elasticsearch.ssl.verificationMode: certificate```
+
+Add required 32 character persistent key for savedObjects in kibana.yml
+Each time Kibana starts it generates a new encryption key for saved objects such as dashboards, visualizations and searches. 
+This should be set manually for local Kibana deployments. 
 Reference: https://www.elastic.co/guide/en/siem/guide/7.6/detection-engine-overview.html#detections-encryption-key
 
-# Example 
-# xpack.encryptedSavedObjects.encryptionKey: 'fhjskhsdhd678ehkdfdlliverpoolfcr'
-xpack.encryptedSavedObjects.encryptionKey: '32 char alpha numberic'
+Example 
+```xpack.encryptedSavedObjects.encryptionKey: 'fhjskhsdhd678ehkdfdlliverpoolfcr'```
+
+```xpack.encryptedSavedObjects.encryptionKey: '32 char alpha numberic'```
 
 
 
-# Kibana and index privileges required for Detections
+Kibana and index privileges required for Detections
 Reference: https://www.elastic.co/guide/en/siem/guide/7.6/detection-engine-overview.html#detections-encryption-key
-# Depending on your privileges and whether a .siem-signals-<space name> index has been created for the Kibana space, 
-# you might see an error message when you try to open the Detections page.
 
-# If you see this message, "Let’s set up your detection engine" a user with these privileges must open the 
-# Detections page before you can view signals and rules:
+Depending on your privileges and whether a .siem-signals-<space name> index has been created for the Kibana space, 
+you might see an error message when you try to open the Detections page.
 
-# Permissions required: 
+If you see this message, "Let’s set up your detection engine" a user with these privileges must open the Detections page before you can view signals and rules:
 
-The manage_api_key cluster privilege (see Security privileges).
-The create_index privilege for the Kibana space (see Indices privileges).
-Kibana space All privileges for the SIEM feature (see Feature access based on user privileges).
+Permissions required: 
+
+The ```manage_api_key`` cluster privilege (see Security privileges).
+The ```create_index privilege``` for the Kibana space (see Indices privileges).
+Kibana space ``All``` privileges for the SIEM feature (see Feature access based on user privileges).
