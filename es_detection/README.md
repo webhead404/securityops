@@ -47,13 +47,14 @@ Start elasticsearch
 
 ```./bin/elasticsearch-setup-passwords auto```
 
-# Elastic will automatically generate random passwords for the users that are needed to 
-# establish connections which will be the elastic and kibana users respectively. 
+Elastic will automatically generate random passwords for the users that are needed to establish connections which will be the elastic and kibana users respectively. 
 
 Now add these lines to Elasticsearch. They are required for Kibana to establish a secure connection to Elasticsearch and will enable the rest of the settings in Elasticsearch for Detection rules. 
 
 ```xpack.security.http.ssl.enabled: true```
+
 ```xpack.security.http.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12```
+
 ```xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
 Copy the client certificate to Kibana and modify kibana.yml 
