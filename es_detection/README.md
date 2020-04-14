@@ -1,5 +1,5 @@
-# This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6
-# All command will have to be run with root/admin privelege
+This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6
+All command will have to be run with root/admin privelege
 
 # First generate certificates. Elastic has a tool for this. 
 
