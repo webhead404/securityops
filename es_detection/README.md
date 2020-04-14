@@ -1,10 +1,10 @@
-This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6
-All command will have to be run with root/admin privelege
+# This is an outline of the steps necessary to enable the new detection engine in Elastic Stack 7.6
+# All command will have to be run with root/admin privelege
 
-# First generate certificates. Elastic has a tool for this. 
+First generate certificates. Elastic has a tool for this. 
 
-./bin/elasticsearch-certutil cert 
-# Set the filename to config/elastic-certificates.p12
+```./bin/elasticsearch-certutil cert```
+1. Set the filename to config/elastic-certificates.p12
 
 # You will need to generate a CA and/or client certificates for each part of the cluster. 
 # That can be accomplished by something like the following:
