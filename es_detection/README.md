@@ -27,9 +27,13 @@ Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-
 # Second add or change/uncomment the following lines in elasticsearch.yml
 
 ```xpack.security.enabled: true```
+
 ```xpack.security.transport.ssl.enabled: true```
+
 ```xpack.security.transport.ssl.verification_mode: certificate```
+
 ```xpack.security.transport.ssl.keystore.path: /etc/elasticsearch/elastic-certificates.p12```
+
 ```xpack.security.transport.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
 
