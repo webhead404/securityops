@@ -66,6 +66,8 @@ Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-
 
 # Edit Kibana config
 
+```server.host: "your-ip-here"```
+
 ```elasticsearch.url: "https://your-ip-here:9200" #ensure https not http```
 
 ```xpack.security.enabled: true```
