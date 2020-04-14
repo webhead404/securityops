@@ -24,7 +24,7 @@ Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-
 ```openssl pkcs12 -in elastic-certificates.p12 -clcerts -nokeys  > client.cer```
 
 
-# Second add or change/uncomment the following lines in elasticsearch.yml
+# Add or change/uncomment the following lines in elasticsearch.yml
 
 ```xpack.security.enabled: true```
 
@@ -49,7 +49,9 @@ Start elasticsearch
 
 Elastic will automatically generate random passwords for the users that are needed to establish connections which will be the elastic and kibana users respectively. 
 
-Now add these lines to Elasticsearch. They are required for Kibana to establish a secure connection to Elasticsearch and will enable the rest of the settings in Elasticsearch for Detection rules. 
+# Add required lines in elasticsearch.yml for Kibana
+
+Add these lines to Elasticsearch. They are required for Kibana to establish a secure connection to Elasticsearch and will enable the rest of the settings in Elasticsearch for Detection rules. 
 
 ```xpack.security.http.ssl.enabled: true```
 
@@ -57,9 +59,12 @@ Now add these lines to Elasticsearch. They are required for Kibana to establish 
 
 ```xpack.security.http.ssl.truststore.path: /etc/elasticsearch/elastic-certificates.p12```
 
-Copy the client certificate to Kibana and modify kibana.yml 
+
+Copy the client certificate to Kibana if it is on a seperate node and modify kibana.yml 
 Add or change/uncomment the following lines
 Reference: https://www.elastic.co/blog/elasticsearch-security-configure-tls-ssl-pki-authentication
+
+# Edit Kibana config
 
 ```elasticsearch.url: "https://your-ip-here:9200" #ensure https not http```
 
@@ -83,7 +88,7 @@ Example
 
 ```xpack.encryptedSavedObjects.encryptionKey: '32 char alpha numberic'```
 
-
+# Kibana index and privileges
 
 Kibana and index privileges required for Detections
 Reference: https://www.elastic.co/guide/en/siem/guide/7.6/detection-engine-overview.html#detections-encryption-key
@@ -95,6 +100,8 @@ If you see this message, "Let’s set up your detection engine" a user with thes
 
 Permissions required: 
 
-The ```manage_api_key`` cluster privilege (see Security privileges).
+The ```manage_api_key cluster privilege``` (see Security privileges).
+
 The ```create_index privilege``` for the Kibana space (see Indices privileges).
-Kibana space ``All``` privileges for the SIEM feature (see Feature access based on user privileges).
+
+Kibana space ``All privileges``` for the SIEM feature (see Feature access based on user privileges).
